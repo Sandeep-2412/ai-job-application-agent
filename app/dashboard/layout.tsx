@@ -7,6 +7,12 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Separator } from "@/components/ui/separator"
 import { createClient } from "@/lib/supabase/server"
 
+/**
+ * Determines whether profile data contains meaningful information beyond an email address.
+ *
+ * @param profileData - The profile data to evaluate, including nested objects and arrays.
+ * @returns `true` if the data contains a nonempty string, truthy primitive, or meaningful nested value, `false` otherwise.
+ */
 function hasMeaningfulProfileData(profileData: unknown): boolean {
   if (!profileData || typeof profileData !== "object") {
     return false
@@ -29,6 +35,13 @@ function hasMeaningfulProfileData(profileData: unknown): boolean {
     })
 }
 
+/**
+ * Builds the authenticated dashboard layout with navigation, responsive content, and conditional onboarding.
+ *
+ * Unauthenticated users are redirected to the sign-in page.
+ *
+ * @returns The dashboard layout content.
+ */
 export default async function DashboardLayout({ children }: LayoutProps<"/dashboard">) {
   const supabase = await createClient()
   const { data } = await supabase.auth.getClaims()
