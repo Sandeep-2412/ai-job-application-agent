@@ -58,6 +58,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          profile_data: Json | null
           updated_at: string
         }
         Insert: {
@@ -66,6 +67,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          profile_data?: Json | null
           updated_at?: string
         }
         Update: {
@@ -74,7 +76,47 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          profile_data?: Json | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      user_resumes: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          parsed_resume_data: Json | null
+          public_url: string | null
+          storage_path: string
+          uploaded_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          parsed_resume_data?: Json | null
+          public_url?: string | null
+          storage_path: string
+          uploaded_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          parsed_resume_data?: Json | null
+          public_url?: string | null
+          storage_path?: string
+          uploaded_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
