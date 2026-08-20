@@ -115,7 +115,7 @@ export function AppSidebar({ user }: { user: AppSidebarUser }) {
                       isActive={isActive}
                       tooltip={item.title}
                       size="lg"
-                      className="gap-3 px-3 text-sm font-medium [&_svg]:size-5! hover:bg-primary/15 hover:text-primary"
+                      className="gap-3 px-3 text-sm font-medium [&_svg]:size-5! hover:!bg-primary/50 hover:!text-primary-foreground data-active:!bg-primary/50 data-active:!text-primary-foreground data-active:hover:!bg-primary/50"
                     >
                       <HugeiconsIcon icon={item.icon} strokeWidth={2} />
                       <span>{item.title}</span>
@@ -143,7 +143,7 @@ export function AppSidebar({ user }: { user: AppSidebarUser }) {
                   isActive={isActive}
                   tooltip={item.title}
                   size="lg"
-                  className="gap-3 px-3 text-sm font-medium [&_svg]:size-5! hover:bg-primary/15 hover:text-primary"
+                  className="gap-3 px-3 text-sm font-medium [&_svg]:size-5! hover:!bg-primary/50 hover:!text-primary-foreground data-active:!bg-primary/50 data-active:!text-primary-foreground data-active:hover:!bg-primary/50"
                 >
                   <HugeiconsIcon icon={item.icon} strokeWidth={2} />
                   <span>{item.title}</span>
