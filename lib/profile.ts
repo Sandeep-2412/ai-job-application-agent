@@ -23,30 +23,56 @@ export type ProfilePayload = {
   links: unknown[]
 }
 
+/**
+ * Converts a non-null object to a record.
+ *
+ * @param value - The value to convert
+ * @returns The value as a record, or an empty record for other values
+ */
 function asRecord(value: unknown): Record<string, unknown> {
   return typeof value === "object" && value ? (value as Record<string, unknown>) : {}
 }
 
+/**
+ * Converts a value to a string when it is already a string.
+ *
+ * @param value - The value to convert
+ * @returns The original string, or an empty string for other values
+ */
 function asString(value: unknown): string {
   return typeof value === "string" ? value : ""
 }
 
+/**
+ * Extracts string elements from an array-like value.
+ *
+ * @param value - The value to convert into a string array
+ * @returns The string elements in `value`, or an empty array if `value` is not an array
+ */
 function asStringArray(value: unknown): string[] {
   return Array.isArray(value)
     ? value.filter((item): item is string => typeof item === "string")
     : []
 }
 
+/**
+ * Converts an unknown value to an array.
+ *
+ * @param value - The value to convert
+ * @returns The input array, or an empty array when the value is not an array
+ */
 function asObjectArray(value: unknown): unknown[] {
   return Array.isArray(value) ? value : []
 }
 
 /**
- * Builds the flat `profile_data` JSON that gets saved to `profiles`.
+ * Builds a normalized profile payload from parsed resume data and stored profile values.
  *
- * Parsed resume values always win when present; otherwise we fall back to the
- * existing stored profile (so re-uploads don't wipe out manually edited
- * fields), and finally to the authenticated user's email for the contact row.
+ * Parsed values take precedence over stored values. Existing profile data preserves
+ * fields omitted from the parsed resume, with the authenticated email used as an
+ * additional fallback for the email field.
+ *
+ * @returns The normalized profile payload
  */
 export function buildProfilePayload(
   parsed: ResumeParsedData,

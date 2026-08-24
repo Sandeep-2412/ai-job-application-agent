@@ -5,6 +5,12 @@ import { parseResumeFile } from "@/lib/resume-parser"
 import type { Json } from "@/lib/supabase/database.types"
 import { createClient } from "@/lib/supabase/server"
 
+/**
+ * Retrieves the authenticated user's resumes or streams an owned resume file.
+ *
+ * @param request - The request containing optional `id` and `action` query parameters.
+ * @returns A resume list, file response, or an error response.
+ */
 export async function GET(request: Request) {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
@@ -70,6 +76,12 @@ export async function GET(request: Request) {
   return NextResponse.json({ resumes: rows ?? [] })
 }
 
+/**
+ * Deletes an authenticated user's resume and its associated storage file.
+ *
+ * @param request - The request containing the resume ID in its query parameters
+ * @returns A response confirming deletion or describing the authorization, validation, not-found, or database error
+ */
 export async function DELETE(request: Request) {
   const supabase = await createClient()
   const { data: userData, error: authError } = await supabase.auth.getUser()
@@ -119,6 +131,11 @@ export async function DELETE(request: Request) {
   return NextResponse.json({ success: true, message: "Resume deleted successfully" })
 }
 
+/**
+ * Uploads a resume, parses its contents, and updates the authenticated user's profile.
+ *
+ * @returns A response containing the parsed resume, public resume URL, and updated profile, or an error response.
+ */
 export async function POST(request: Request) {
   // 1. Verify the user is authenticated (uses user-scoped client)
   const supabase = await createClient()

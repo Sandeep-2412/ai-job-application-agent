@@ -6,14 +6,33 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import type { ProfileFormValue } from "@/components/dashboard/profile-form"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
+/**
+ * Determines whether a string contains text after trimming whitespace.
+ *
+ * @param value - The string to evaluate
+ * @returns `true` if the trimmed string contains at least one character, `false` otherwise
+ */
 function hasText(value: string) {
   return value.trim().length > 0
 }
 
+/**
+ * Determines whether an array contains at least one meaningful item.
+ *
+ * @param value - The array to inspect
+ * @param isMeaningful - Predicate used to identify meaningful items
+ * @returns `true` if the array contains a meaningful item, `false` otherwise
+ */
 function hasArrayData<T>(value: T[], isMeaningful: (item: T) => boolean = () => true) {
   return value.some(isMeaningful)
 }
 
+/**
+ * Evaluates the completion status of the profile's major sections.
+ *
+ * @param profile - The profile data to evaluate
+ * @returns The completion status for each section and the overall completion percentage
+ */
 function getCompleteness(profile: ProfileFormValue) {
   const checks = [
     { label: "Contact details", complete: hasText(profile.fullName) && hasText(profile.email) },
@@ -45,6 +64,12 @@ function getCompleteness(profile: ProfileFormValue) {
   return { checks, percentage: Math.round((completed / checks.length) * 100) }
 }
 
+/**
+ * Selects the color, label, and text class for a profile completion percentage.
+ *
+ * @param percentage - The profile completion percentage.
+ * @returns The display color, status label, and text class for the percentage range.
+ */
 function getProgressTone(percentage: number) {
   if (percentage < 40) {
     return { color: "#ef4444", label: "Getting started", className: "text-red-500" }
@@ -58,6 +83,11 @@ function getProgressTone(percentage: number) {
   return { color: "#84cc16", label: "Profile complete", className: "text-lime-500" }
 }
 
+/**
+ * Renders a card showing the profile's completion percentage and completed sections.
+ *
+ * @param profile - The profile data used to determine completion status.
+ */
 export function ProfileCompletenessCard({ profile }: { profile: ProfileFormValue }) {
   const { checks, percentage } = getCompleteness(profile)
   const tone = getProgressTone(percentage)

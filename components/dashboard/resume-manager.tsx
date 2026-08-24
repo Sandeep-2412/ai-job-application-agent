@@ -15,6 +15,12 @@ export type ResumeFileRecord = {
   public_url?: string | null
 }
 
+/**
+ * Provides controls for uploading, viewing, downloading, and deleting resume files.
+ *
+ * @param initialFiles - Resume files to display in the manager.
+ * @returns The rendered resume management interface.
+ */
 export function ResumeManager({ initialFiles }: { initialFiles: ResumeFileRecord[] }) {
   const router = useRouter()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)

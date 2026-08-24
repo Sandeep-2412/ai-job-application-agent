@@ -70,6 +70,12 @@ const emptyResumeData: ResumeParsedData = {
   additionalInfo: {},
 }
 
+/**
+ * Converts an array or delimited string into a trimmed list of nonempty strings.
+ *
+ * @param value - The value to normalize.
+ * @returns The normalized string list, or an empty list for unsupported values.
+ */
 function cleanArray(value: unknown): string[] {
   if (Array.isArray(value)) {
     return value
@@ -87,6 +93,14 @@ function cleanArray(value: unknown): string[] {
   return []
 }
 
+/**
+ * Normalizes arbitrary input into the expected resume data structure.
+ *
+ * Supports alternate field names, validates string values, normalizes nested collections, and supplies defaults for missing or invalid data.
+ *
+ * @param value - The input value to normalize
+ * @returns A normalized resume data object
+ */
 function normalizeResumeJson(value: unknown): ResumeParsedData {
   const source = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const profile = (source.profile as Record<string, unknown>) ?? {}
@@ -207,6 +221,12 @@ function normalizeResumeJson(value: unknown): ResumeParsedData {
   }
 }
 
+/**
+ * Removes common PDF pagination markers and carriage returns from extracted text.
+ *
+ * @param text - The extracted PDF text to clean
+ * @returns The cleaned text with surrounding whitespace removed
+ */
 function cleanPdfArtifacts(text: string): string {
   return text
     .replace(/--\s*\d+\s+of\s+\d+\s*--/gi, "")
@@ -215,6 +235,12 @@ function cleanPdfArtifacts(text: string): string {
     .trim()
 }
 
+/**
+ * Extracts structured resume data from raw text using heuristic parsing.
+ *
+ * @param rawText - The resume text to parse
+ * @returns Parsed profile, summary, skills, work experience, education, links, and extraction metadata
+ */
 function fallbackParseFromText(rawText: string): ResumeParsedData {
   const cleanedText = cleanPdfArtifacts(rawText)
   const lines = cleanedText.split("\n").map((l) => l.trim()).filter(Boolean)
@@ -401,6 +427,14 @@ function fallbackParseFromText(rawText: string): ResumeParsedData {
   }
 }
 
+/**
+ * Extracts readable text from a PDF, DOCX, or text-based resume file.
+ *
+ * @param fileName - The original file name, used to identify the file format
+ * @param mimeType - The file's MIME type
+ * @param buffer - The file contents
+ * @returns The extracted resume text
+ */
 async function extractTextFromResume(fileName: string, mimeType: string, buffer: Buffer) {
   const lowerName = fileName.toLowerCase()
 
@@ -457,6 +491,12 @@ async function extractTextFromResume(fileName: string, mimeType: string, buffer:
   return buffer.toString("utf8")
 }
 
+/**
+ * Extracts structured resume data from text using Gemini when configured, with heuristic parsing as a fallback.
+ *
+ * @param text - Resume text to analyze
+ * @returns Normalized parsed resume data
+ */
 async function parseWithGemini(text: string): Promise<ResumeParsedData> {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
@@ -514,6 +554,14 @@ ${text}`
   }
 }
 
+/**
+ * Parses a resume file into structured profile data.
+ *
+ * @param fileName - The name of the resume file
+ * @param mimeType - The file's MIME type
+ * @param fileBuffer - The resume file contents
+ * @returns The parsed resume data, or empty data when the file has no text
+ */
 export async function parseResumeFile(fileName: string, mimeType: string, fileBuffer: Buffer) {
   const text = await extractTextFromResume(fileName, mimeType, fileBuffer)
   const trimmed = text.trim()
