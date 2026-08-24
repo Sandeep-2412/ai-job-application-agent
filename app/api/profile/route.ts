@@ -4,6 +4,11 @@ import type { Json } from "@/lib/supabase/database.types"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createClient } from "@/lib/supabase/server"
 
+/**
+ * Retrieves the authenticated user's profile.
+ *
+ * @returns A JSON response containing the profile, or an error response when authentication or retrieval fails.
+ */
 export async function GET() {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
@@ -27,6 +32,12 @@ export async function GET() {
   return NextResponse.json({ profile: profile ?? null })
 }
 
+/**
+ * Saves the authenticated user's profile.
+ *
+ * @param request - The request containing profile fields to normalize and persist
+ * @returns A success response with the saved profile, or an error response when authentication or persistence fails
+ */
 export async function POST(request: Request) {
   const supabase = await createClient()
   const { data: userData, error: authError } = await supabase.auth.getUser()

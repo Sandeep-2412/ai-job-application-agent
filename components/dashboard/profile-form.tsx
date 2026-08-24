@@ -70,6 +70,12 @@ const defaultProfileForm: ProfileFormValue = {
   links: [{ label: "", url: "" }],
 }
 
+/**
+ * Converts skill input into a list of skill names.
+ *
+ * @param value - A skill array or comma-separated skill string
+ * @returns The parsed skill names
+ */
 function parseSkills(value: unknown): string[] {
   if (Array.isArray(value)) {
     return value.filter((entry): entry is string => typeof entry === "string")
@@ -80,18 +86,45 @@ function parseSkills(value: unknown): string[] {
   return []
 }
 
+/**
+ * Extracts a string value from unknown input.
+ *
+ * @param value - The value to convert
+ * @returns The input string, or an empty string when the value is not a string
+ */
 function stringValue(value: unknown) {
   return typeof value === "string" ? value : ""
 }
 
+/**
+ * Extracts string values from an array.
+ *
+ * @param value - The value to convert into a string array
+ * @returns The string elements of `value`, or an empty array when `value` is not an array
+ */
 function stringArray(value: unknown) {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
 
+/**
+ * Converts an unknown value to a record when it is a non-null object.
+ *
+ * @param value - The value to convert
+ * @returns The value as a record, or an empty record for other values
+ */
 function recordValue(value: unknown): Record<string, unknown> {
   return typeof value === "object" && value ? value as Record<string, unknown> : {}
 }
 
+/**
+ * Normalizes raw profile data into the profile form structure.
+ *
+ * Supports nested and legacy field names, coerces values to expected types, and
+ * supplies default entries for empty repeatable sections.
+ *
+ * @param raw - Raw profile data to normalize
+ * @returns A normalized profile form value
+ */
 function normalizeProfile(raw: Record<string, unknown> | null | undefined): ProfileFormValue {
   const data = raw ?? {}
   const nestedProfile = recordValue(data.profile)
@@ -170,6 +203,14 @@ function normalizeProfile(raw: Record<string, unknown> | null | undefined): Prof
 
 const primaryActionClass = "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
 
+/**
+ * Renders a section heading with descriptive text and an action button.
+ *
+ * @param title - The section title
+ * @param description - The section description
+ * @param onAdd - Invoked when the action button is clicked
+ * @param addLabel - The action button label
+ */
 function SectionHeading({ title, description, onAdd, addLabel }: {
   title: string
   description: string
@@ -190,6 +231,12 @@ function SectionHeading({ title, description, onAdd, addLabel }: {
   )
 }
 
+/**
+ * Renders an editable profile form for personal details and professional history.
+ *
+ * @param initialProfile - Initial profile data to populate the form
+ * @param email - Fallback email address when the initial profile does not contain one
+ */
 export function ProfileForm({ initialProfile, email }: { initialProfile?: Record<string, unknown> | null; email?: string }) {
   const router = useRouter()
   const resolvedInitial = useMemo(

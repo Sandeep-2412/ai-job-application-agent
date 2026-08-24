@@ -13,6 +13,11 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 
+/**
+ * Displays a required onboarding dialog for uploading a resume.
+ *
+ * @param open - Whether the onboarding dialog is visible.
+ */
 export function OnboardingDialog({ open }: { open: boolean }) {
   const router = useRouter()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)

@@ -5,6 +5,11 @@ import { ProfileForm } from "@/components/dashboard/profile-form"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createClient } from "@/lib/supabase/server"
 
+/**
+ * Renders the authenticated user's profile page with profile data and resume-derived fallback data.
+ *
+ * @returns The profile page for the authenticated user, or `null` when no user is authenticated.
+ */
 export default async function ProfilePage() {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()

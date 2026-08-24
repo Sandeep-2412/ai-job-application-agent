@@ -5,6 +5,11 @@ import { ResumeManager } from "@/components/dashboard/resume-manager"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createClient } from "@/lib/supabase/server"
 
+/**
+ * Renders the authenticated user's resume management page.
+ *
+ * @returns The resume management page, or `null` when no authenticated user exists.
+ */
 export default async function ResumePage() {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
